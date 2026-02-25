@@ -33,28 +33,29 @@ export function AddTaskDialog({ onAdd }: AddTaskDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="ghost"
-          className="h-8 px-3 text-[13px] text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+          variant="outline"
+          size="sm"
+          className="h-9 px-4 text-[13px] font-medium border-border/30 bg-secondary/40 text-foreground/80 hover:bg-secondary/70 hover:text-foreground transition-colors"
         >
-          <Plus className="size-3.5 mr-1.5" />
-          Add task
+          <Plus className="size-4 mr-1.5" />
+          Add Task
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-card border-border/50 sm:max-w-md">
+      <DialogContent className="bg-card border-border/30 sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-foreground text-[15px] font-medium">
+          <DialogTitle className="text-foreground text-[16px] font-medium">
             New task
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
           <Input
             placeholder="What are you building tonight?"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="h-10 bg-secondary/60 border-border/50 text-foreground text-[13px] placeholder:text-muted-foreground/40 focus-visible:ring-1 focus-visible:ring-primary/30"
+            className="h-11 bg-secondary/50 border-border/30 text-foreground text-[14px] placeholder:text-muted-foreground/40 focus-visible:ring-1 focus-visible:ring-primary/30"
             autoFocus
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2.5">
             <Button
               type="button"
               variant="ghost"
@@ -68,9 +69,9 @@ export function AddTaskDialog({ onAdd }: AddTaskDialogProps) {
               type="submit"
               size="sm"
               disabled={!title.trim()}
-              className="text-[13px] bg-primary text-primary-foreground hover:bg-primary/85"
+              className="text-[13px] bg-primary text-primary-foreground hover:bg-primary/85 px-5"
             >
-              Add
+              Add task
             </Button>
           </div>
         </form>

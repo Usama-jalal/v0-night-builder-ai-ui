@@ -26,7 +26,7 @@ export function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {
   const displayProgress = isDone ? 100 : task.progress
 
   return (
-    <div className="group flex items-center gap-4 px-4 py-3.5 rounded-lg border border-border/30 bg-card/50 hover:bg-card/80 transition-colors">
+    <div className="group flex items-center gap-4 px-4 py-4 rounded-xl border border-border/20 bg-card/40 hover:bg-card/70 hover:border-border/40 transition-all duration-200">
       {/* Toggle */}
       <button
         onClick={() => onToggle(task.id)}
@@ -34,51 +34,49 @@ export function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {
         aria-label={isDone ? "Mark as pending" : "Mark as done"}
       >
         {isDone ? (
-          <div className="flex items-center justify-center size-5 rounded-full bg-success/20 text-success">
-            <Check className="size-3" strokeWidth={3} />
+          <div className="flex items-center justify-center size-5 rounded-full bg-success/15 text-success ring-1 ring-success/20">
+            <Check className="size-3" strokeWidth={2.5} />
           </div>
         ) : (
-          <Circle className="size-5 text-muted-foreground/40 hover:text-primary transition-colors" />
+          <Circle className="size-5 text-muted-foreground/30 hover:text-primary/60 transition-colors" />
         )}
       </button>
 
-      {/* Content */}
-      <div className="flex-1 min-w-0 flex items-center gap-4">
-        <span
-          className={`text-[13.5px] truncate flex-1 ${
-            isDone ? "line-through text-muted-foreground/50" : "text-foreground/90"
-          }`}
-        >
-          {task.title}
-        </span>
+      {/* Title */}
+      <span
+        className={`text-[14px] truncate flex-1 transition-colors ${
+          isDone ? "line-through text-muted-foreground/40" : "text-foreground/85"
+        }`}
+      >
+        {task.title}
+      </span>
 
-        {/* Inline progress */}
-        <div className="hidden sm:flex items-center gap-2.5 flex-shrink-0">
-          <div className="w-16 h-1 rounded-full bg-secondary overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isDone ? "bg-success/60" : "bg-primary/60"
-              }`}
-              style={{ width: `${displayProgress}%` }}
-            />
-          </div>
-          <span className="text-[11px] text-muted-foreground/50 tabular-nums w-7 text-right">
-            {displayProgress}%
-          </span>
+      {/* Inline progress */}
+      <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+        <div className="w-20 h-1 rounded-full bg-secondary/80 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              isDone ? "bg-success/50" : "bg-primary/50"
+            }`}
+            style={{ width: `${displayProgress}%` }}
+          />
         </div>
+        <span className="text-[11px] text-muted-foreground/40 tabular-nums w-8 text-right">
+          {displayProgress}%
+        </span>
       </div>
 
       {/* Actions */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded text-muted-foreground/40 hover:text-foreground"
+            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded text-muted-foreground/30 hover:text-foreground"
             aria-label="Task options"
           >
             <MoreHorizontal className="size-4" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40 bg-card border-border/50">
+        <DropdownMenuContent align="end" className="w-40 bg-card border-border/40">
           <DropdownMenuItem
             onClick={() => onToggle(task.id)}
             className="text-[13px] text-muted-foreground hover:text-foreground cursor-pointer"

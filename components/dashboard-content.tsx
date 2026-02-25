@@ -48,72 +48,63 @@ export function DashboardContent() {
   }
 
   return (
-    <div className="flex-1 px-6 md:px-8 py-10 md:py-14 max-w-5xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex flex-col gap-1.5 mb-14">
-        <h1 className="text-[22px] md:text-[26px] font-semibold tracking-tight text-foreground">
-          Good evening
+    <main className="flex-1 px-6 lg:px-10 py-12 lg:py-16 max-w-6xl mx-auto w-full">
+      {/* Greeting */}
+      <div className="mb-10">
+        <h1 className="text-[28px] lg:text-[32px] font-semibold tracking-[-0.025em] text-foreground leading-tight">
+          {"Good evening, builder \u{1F319}"}
         </h1>
-        <p className="text-[13.5px] text-muted-foreground">
+        <p className="text-[14px] text-muted-foreground mt-2">
           {"Here's what you're building tonight."}
         </p>
       </div>
 
-      {/* Metrics row */}
-      <div className="flex items-center gap-10 mb-14 pb-10 border-b border-border/30">
-        <div className="flex flex-col gap-1">
-          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
-            {totalCount}
-          </span>
-          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
-            Tasks
+      {/* Daily completion progress */}
+      <div className="mb-12 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[13px] text-muted-foreground">Daily progress</span>
+          <span className="text-[13px] font-medium text-foreground tabular-nums">
+            {completedCount}/{totalCount} tasks
           </span>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
-            {completedCount}
-          </span>
-          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
-            Done
-          </span>
+        <div className="relative w-full h-2 rounded-full bg-secondary/80 overflow-hidden">
+          <div
+            className="absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out"
+            style={{
+              width: `${completionPercent}%`,
+              background: "linear-gradient(90deg, oklch(0.68 0.14 280), oklch(0.60 0.16 260))",
+            }}
+          />
+          {/* Subtle glow on progress tip */}
+          <div
+            className="absolute top-1/2 -translate-y-1/2 size-4 rounded-full blur-md opacity-40 transition-all duration-700"
+            style={{
+              left: `calc(${completionPercent}% - 8px)`,
+              background: "oklch(0.68 0.14 280)",
+            }}
+            aria-hidden="true"
+          />
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
-            3
-          </span>
-          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
-            Streak
-          </span>
-        </div>
-        <div className="flex-1" />
-        <div className="hidden sm:flex flex-col items-end gap-2">
-          <span className="text-[12px] text-muted-foreground/50 tabular-nums">
-            {completionPercent}% complete
-          </span>
-          <div className="w-32 h-1 rounded-full bg-secondary overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary/70 transition-all duration-700 ease-out"
-              style={{ width: `${completionPercent}%` }}
-            />
-          </div>
-        </div>
+        <span className="text-[12px] text-muted-foreground/50">
+          {completionPercent}% complete
+        </span>
       </div>
 
-      {/* Task section */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-[14px] font-medium text-foreground/80 tracking-wide">
-          {"Tonight's tasks"}
+      {/* Task section header */}
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-[15px] font-medium text-foreground tracking-[-0.01em]">
+          Tasks
         </h2>
         <AddTaskDialog onAdd={handleAdd} />
       </div>
 
       {/* Task list */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2">
         {tasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <p className="text-[13px] text-muted-foreground/50">No tasks yet</p>
-            <p className="text-[12px] text-muted-foreground/30 mt-1">
-              Add your first task to start building
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <p className="text-[14px] text-muted-foreground/60">No tasks yet</p>
+            <p className="text-[13px] text-muted-foreground/30 mt-1.5">
+              Add your first task to start building tonight
             </p>
           </div>
         ) : (
@@ -127,6 +118,6 @@ export function DashboardContent() {
           ))
         )}
       </div>
-    </div>
+    </main>
   )
 }
