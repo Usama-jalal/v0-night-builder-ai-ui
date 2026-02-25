@@ -2,9 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 
 export function LoginForm() {
@@ -23,74 +20,99 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email" className="text-[13px] text-muted-foreground font-normal">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
+      {/* Email */}
+      <div className="flex flex-col gap-2.5">
+        <label
+          htmlFor="email"
+          className="text-[12px] font-medium tracking-[0.04em] uppercase text-muted-foreground/60"
+        >
           Email
-        </Label>
-        <Input
+        </label>
+        <input
           id="email"
           type="email"
-          placeholder="you@example.com"
+          placeholder="you@company.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="h-11 bg-secondary/60 border-border/50 text-foreground placeholder:text-muted-foreground/40 focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:border-primary/30 transition-colors"
+          autoComplete="email"
+          className="h-12 w-full rounded-lg bg-secondary/40 border border-border/40 px-4 text-[14px] text-foreground placeholder:text-muted-foreground/30 outline-none transition-all duration-200 focus:border-primary/40 focus:bg-secondary/60 focus:shadow-[0_0_0_3px_var(--glow)]"
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* Password */}
+      <div className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
-          <Label htmlFor="password" className="text-[13px] text-muted-foreground font-normal">
+          <label
+            htmlFor="password"
+            className="text-[12px] font-medium tracking-[0.04em] uppercase text-muted-foreground/60"
+          >
             Password
-          </Label>
+          </label>
           <button
             type="button"
-            className="text-[12px] text-muted-foreground/60 hover:text-foreground transition-colors"
+            className="text-[12px] text-muted-foreground/40 hover:text-primary/80 transition-colors duration-200"
           >
-            Forgot password?
+            Forgot?
           </button>
         </div>
         <div className="relative">
-          <Input
+          <input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="h-11 bg-secondary/60 border-border/50 text-foreground placeholder:text-muted-foreground/40 pr-11 focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:border-primary/30 transition-colors"
+            autoComplete="current-password"
+            className="h-12 w-full rounded-lg bg-secondary/40 border border-border/40 px-4 pr-12 text-[14px] text-foreground placeholder:text-muted-foreground/30 outline-none transition-all duration-200 focus:border-primary/40 focus:bg-secondary/60 focus:shadow-[0_0_0_3px_var(--glow)]"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors duration-200"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            {showPassword ? <EyeOff className="size-[18px]" /> : <Eye className="size-[18px]" />}
           </button>
         </div>
       </div>
 
-      <Button
+      {/* Submit */}
+      <button
         type="submit"
         disabled={isLoading}
-        className="h-11 bg-primary text-primary-foreground hover:bg-primary/85 font-medium text-[13px] tracking-wide mt-3 transition-all shadow-[0_0_24px_var(--glow)] hover:shadow-[0_0_32px_var(--glow-strong)]"
+        className="group relative h-12 w-full rounded-lg bg-primary text-primary-foreground font-medium text-[13px] tracking-[0.02em] mt-2 transition-all duration-300 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
       >
-        {isLoading ? (
-          <div className="size-4 border-2 border-primary-foreground/20 border-t-primary-foreground rounded-full animate-spin" />
-        ) : (
-          <>
-            Sign in
-            <ArrowRight className="size-3.5 ml-2" />
-          </>
-        )}
-      </Button>
+        {/* Subtle shimmer on hover */}
+        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" aria-hidden="true" />
+        {/* Glow underneath */}
+        <span
+          className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-[60%] h-8 blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 rounded-full"
+          style={{ background: "var(--primary)" }}
+          aria-hidden="true"
+        />
+        <span className="relative flex items-center justify-center gap-2">
+          {isLoading ? (
+            <span className="size-4 border-2 border-primary-foreground/20 border-t-primary-foreground rounded-full animate-spin" />
+          ) : (
+            <>
+              Continue
+              <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </>
+          )}
+        </span>
+      </button>
 
-      <p className="text-center text-[13px] text-muted-foreground/50 mt-1">
-        {"Don't have an account? "}
-        <button type="button" className="text-foreground/70 hover:text-foreground transition-colors">
-          Sign up
+      {/* Sign up link */}
+      <p className="text-center text-[13px] text-muted-foreground/40 mt-1">
+        {"New here? "}
+        <button
+          type="button"
+          className="text-primary/70 hover:text-primary transition-colors duration-200"
+        >
+          Create an account
         </button>
       </p>
     </form>
