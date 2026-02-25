@@ -1,7 +1,6 @@
 "use client"
 
-import { CheckCircle2, Clock, MoreHorizontal, Trash2 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Check, Circle, MoreHorizontal, Trash2, RotateCcw } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,66 +23,47 @@ interface TaskCardProps {
 
 export function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {
   const isDone = task.status === "done"
+  const displayProgress = isDone ? 100 : task.progress
 
   return (
-    <div
-      className={`group relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 hover:shadow-[0_0_20px_var(--glow)] ${
-        isDone
-          ? "bg-surface/50 border-success/20"
-          : "bg-card border-border/60 hover:border-primary/30"
-      }`}
-    >
-      {/* Status toggle */}
+    <div className="group flex items-center gap-4 px-4 py-3.5 rounded-lg border border-border/30 bg-card/50 hover:bg-card/80 transition-colors">
+      {/* Toggle */}
       <button
         onClick={() => onToggle(task.id)}
-        className={`flex-shrink-0 flex items-center justify-center size-10 rounded-lg transition-all ${
-          isDone
-            ? "bg-success/15 text-success"
-            : "bg-secondary text-muted-foreground hover:text-primary hover:bg-primary/10"
-        }`}
+        className="flex-shrink-0 transition-colors"
         aria-label={isDone ? "Mark as pending" : "Mark as done"}
       >
         {isDone ? (
-          <CheckCircle2 className="size-5" />
+          <div className="flex items-center justify-center size-5 rounded-full bg-success/20 text-success">
+            <Check className="size-3" strokeWidth={3} />
+          </div>
         ) : (
-          <Clock className="size-5" />
+          <Circle className="size-5 text-muted-foreground/40 hover:text-primary transition-colors" />
         )}
       </button>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-2">
-          <h3
-            className={`font-medium text-sm truncate ${
-              isDone ? "line-through text-muted-foreground" : "text-foreground"
-            }`}
-          >
-            {task.title}
-          </h3>
-          <Badge
-            variant="secondary"
-            className={`text-[10px] px-2 py-0.5 font-medium uppercase tracking-wider shrink-0 ${
-              isDone
-                ? "bg-success/15 text-success border-success/20"
-                : "bg-primary/10 text-primary border-primary/20"
-            }`}
-          >
-            {isDone ? "Done" : "Pending"}
-          </Badge>
-        </div>
+      <div className="flex-1 min-w-0 flex items-center gap-4">
+        <span
+          className={`text-[13.5px] truncate flex-1 ${
+            isDone ? "line-through text-muted-foreground/50" : "text-foreground/90"
+          }`}
+        >
+          {task.title}
+        </span>
 
-        {/* Progress bar */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden">
+        {/* Inline progress */}
+        <div className="hidden sm:flex items-center gap-2.5 flex-shrink-0">
+          <div className="w-16 h-1 rounded-full bg-secondary overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                isDone ? "bg-success" : "bg-primary"
+                isDone ? "bg-success/60" : "bg-primary/60"
               }`}
-              style={{ width: `${isDone ? 100 : task.progress}%` }}
+              style={{ width: `${displayProgress}%` }}
             />
           </div>
-          <span className="text-xs text-muted-foreground tabular-nums">
-            {isDone ? 100 : task.progress}%
+          <span className="text-[11px] text-muted-foreground/50 tabular-nums w-7 text-right">
+            {displayProgress}%
           </span>
         </div>
       </div>
@@ -92,35 +72,35 @@ export function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground"
+            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded text-muted-foreground/40 hover:text-foreground"
             aria-label="Task options"
           >
             <MoreHorizontal className="size-4" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-card border-border">
+        <DropdownMenuContent align="end" className="w-40 bg-card border-border/50">
           <DropdownMenuItem
             onClick={() => onToggle(task.id)}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="text-[13px] text-muted-foreground hover:text-foreground cursor-pointer"
           >
             {isDone ? (
               <>
-                <Clock className="size-4 mr-2" />
-                Mark as pending
+                <RotateCcw className="size-3.5 mr-2" />
+                Mark pending
               </>
             ) : (
               <>
-                <CheckCircle2 className="size-4 mr-2" />
-                Mark as done
+                <Check className="size-3.5 mr-2" />
+                Mark done
               </>
             )}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => onDelete(task.id)}
-            className="text-destructive hover:text-destructive cursor-pointer"
+            className="text-[13px] text-destructive hover:text-destructive cursor-pointer"
           >
-            <Trash2 className="size-4 mr-2" />
-            Delete task
+            <Trash2 className="size-3.5 mr-2" />
+            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

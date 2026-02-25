@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
 
 interface AddTaskDialogProps {
@@ -33,44 +32,45 @@ export function AddTaskDialog({ onAdd }: AddTaskDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_var(--glow)] hover:shadow-[0_0_25px_var(--glow-strong)] transition-all">
-          <Plus className="size-4 mr-2" />
-          Add Task
+        <Button
+          variant="ghost"
+          className="h-8 px-3 text-[13px] text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+        >
+          <Plus className="size-3.5 mr-1.5" />
+          Add task
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-card border-border sm:max-w-md">
+      <DialogContent className="bg-card border-border/50 sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-foreground">Add a new task</DialogTitle>
+          <DialogTitle className="text-foreground text-[15px] font-medium">
+            New task
+          </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="task-title" className="text-sm text-muted-foreground">
-              Task title
-            </Label>
-            <Input
-              id="task-title"
-              placeholder="What are you building tonight?"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="h-11 bg-secondary border-border text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
-              autoFocus
-            />
-          </div>
-          <div className="flex justify-end gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-1">
+          <Input
+            placeholder="What are you building tonight?"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="h-10 bg-secondary/60 border-border/50 text-foreground text-[13px] placeholder:text-muted-foreground/40 focus-visible:ring-1 focus-visible:ring-primary/30"
+            autoFocus
+          />
+          <div className="flex justify-end gap-2">
             <Button
               type="button"
               variant="ghost"
+              size="sm"
               onClick={() => setOpen(false)}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-[13px] text-muted-foreground hover:text-foreground"
             >
               Cancel
             </Button>
             <Button
               type="submit"
+              size="sm"
               disabled={!title.trim()}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="text-[13px] bg-primary text-primary-foreground hover:bg-primary/85"
             >
-              Add Task
+              Add
             </Button>
           </div>
         </form>

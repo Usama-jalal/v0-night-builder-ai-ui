@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Target, Flame, CheckCircle2 } from "lucide-react"
 import { TaskCard, type Task } from "@/components/task-card"
 import { AddTaskDialog } from "@/components/add-task-dialog"
 
@@ -49,85 +48,71 @@ export function DashboardContent() {
   }
 
   return (
-    <div className="flex-1 px-4 md:px-6 py-8 max-w-6xl mx-auto w-full">
-      {/* Welcome section */}
-      <div className="flex flex-col gap-1 mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground text-balance">
-          Good evening, builder
+    <div className="flex-1 px-6 md:px-8 py-10 md:py-14 max-w-5xl mx-auto w-full">
+      {/* Header */}
+      <div className="flex flex-col gap-1.5 mb-14">
+        <h1 className="text-[22px] md:text-[26px] font-semibold tracking-tight text-foreground">
+          Good evening
         </h1>
-        <p className="text-muted-foreground text-sm">
-          {"Here's what you're building tonight. Stay focused."}
+        <p className="text-[13.5px] text-muted-foreground">
+          {"Here's what you're building tonight."}
         </p>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border/60">
-          <div className="flex items-center justify-center size-10 rounded-lg bg-primary/10">
-            <Target className="size-5 text-primary" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-foreground tabular-nums">{totalCount}</p>
-            <p className="text-xs text-muted-foreground">Total tasks</p>
-          </div>
+      {/* Metrics row */}
+      <div className="flex items-center gap-10 mb-14 pb-10 border-b border-border/30">
+        <div className="flex flex-col gap-1">
+          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
+            {totalCount}
+          </span>
+          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
+            Tasks
+          </span>
         </div>
-        <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border/60">
-          <div className="flex items-center justify-center size-10 rounded-lg bg-success/10">
-            <CheckCircle2 className="size-5 text-success" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-foreground tabular-nums">{completedCount}</p>
-            <p className="text-xs text-muted-foreground">Completed</p>
-          </div>
+        <div className="flex flex-col gap-1">
+          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
+            {completedCount}
+          </span>
+          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
+            Done
+          </span>
         </div>
-        <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border/60">
-          <div className="flex items-center justify-center size-10 rounded-lg bg-accent/10">
-            <Flame className="size-5 text-accent" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-foreground tabular-nums">3</p>
-            <p className="text-xs text-muted-foreground">Day streak</p>
+        <div className="flex flex-col gap-1">
+          <span className="text-[28px] font-semibold text-foreground tabular-nums leading-none">
+            3
+          </span>
+          <span className="text-[12px] text-muted-foreground/60 tracking-wide uppercase">
+            Streak
+          </span>
+        </div>
+        <div className="flex-1" />
+        <div className="hidden sm:flex flex-col items-end gap-2">
+          <span className="text-[12px] text-muted-foreground/50 tabular-nums">
+            {completionPercent}% complete
+          </span>
+          <div className="w-32 h-1 rounded-full bg-secondary overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary/70 transition-all duration-700 ease-out"
+              style={{ width: `${completionPercent}%` }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Daily progress */}
-      <div className="p-5 rounded-xl bg-card border border-border/60 mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-medium text-foreground">Daily completion</h2>
-          <span className="text-sm font-semibold text-primary tabular-nums">{completionPercent}%</span>
-        </div>
-        <div className="h-2.5 rounded-full bg-secondary overflow-hidden">
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-700 ease-out shadow-[0_0_10px_var(--glow)]"
-            style={{ width: `${completionPercent}%` }}
-          />
-        </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          {completedCount} of {totalCount} tasks completed tonight
-        </p>
-      </div>
-
-      {/* Today's Focus section */}
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h2 className="text-lg font-semibold text-foreground">{"Today's Focus"}</h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Your tasks for tonight&apos;s session
-          </p>
-        </div>
+      {/* Task section */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-[14px] font-medium text-foreground/80 tracking-wide">
+          {"Tonight's tasks"}
+        </h2>
         <AddTaskDialog onAdd={handleAdd} />
       </div>
 
       {/* Task list */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1.5">
         {tasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="size-12 rounded-xl bg-secondary flex items-center justify-center mb-4">
-              <Target className="size-6 text-muted-foreground" />
-            </div>
-            <p className="text-sm text-muted-foreground">No tasks yet</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <p className="text-[13px] text-muted-foreground/50">No tasks yet</p>
+            <p className="text-[12px] text-muted-foreground/30 mt-1">
               Add your first task to start building
             </p>
           </div>
