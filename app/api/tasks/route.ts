@@ -9,7 +9,7 @@ export async function GET() {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.log("[v0] Supabase GET error:", error.message)
+
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     .single()
 
   if (error) {
-    console.log("[v0] Supabase POST error:", error.message)
+
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
@@ -46,7 +46,7 @@ export async function PATCH(request: Request) {
     .single()
 
   if (error) {
-    console.log("[v0] Supabase PATCH error:", error.message)
+
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
@@ -65,7 +65,7 @@ export async function DELETE(request: Request) {
   const { error } = await supabase.from("tasks").delete().eq("id", id)
 
   if (error) {
-    console.log("[v0] Supabase DELETE error:", error.message)
+
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
