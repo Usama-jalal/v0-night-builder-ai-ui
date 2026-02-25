@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
   const { data, error } = await supabase
     .from("tasks")
-    .insert({ title: body.title, status: "pending", category: body.category || "default" })
+    .insert({ title: body.title, status: "pending" })
     .select()
     .single()
 
