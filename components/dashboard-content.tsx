@@ -1,48 +1,72 @@
 "use client"
 
-import { useState } from "react"
+import useSWR from "swr"
 import { TaskCard, type Task } from "@/components/task-card"
 import { AddTaskDialog } from "@/components/add-task-dialog"
+import { Loader2 } from "lucide-react"
 
-const initialTasks: Task[] = [
-  { id: "1", title: "Design landing page mockups", status: "done", category: "design" },
-  { id: "2", title: "Build authentication flow", status: "pending", category: "code" },
-  { id: "3", title: "Set up database schema", status: "pending", category: "database" },
-  { id: "4", title: "Write API documentation", status: "pending", category: "docs" },
-  { id: "5", title: "Create onboarding screens", status: "done", category: "design" },
-  { id: "6", title: "Deploy staging environment", status: "pending", category: "deploy" },
-  { id: "7", title: "Implement dark mode toggle", status: "done", category: "code" },
-]
+const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export function DashboardContent() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks)
+  const { data: tasks, error, isLoading, mutate } = useSWR<Task[]>("/api/tasks", fetcher)
 
-  const completedCount = tasks.filter((t) => t.status === "done").length
-  const totalCount = tasks.length
+  const completedCount = tasks?.filter((t) => t.status === "done").length ?? 0
+  const totalCount = tasks?.length ?? 0
   const completionPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
-  const handleToggle = (id: string) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? { ...t, status: t.status === "done" ? "pending" : "done" }
-          : t
-      )
+  const handleToggle = async (id: string) => {
+    if (!tasks) return
+    const task = tasks.find((t) => t.id === id)
+    if (!task) return
+
+    const newStatus = task.status === "done" ? "pending" : "done"
+
+    // Optimistic update
+    mutate(
+      tasks.map((t) => (t.id === id ? { ...t, status: newStatus } : t)),
+      false
     )
+
+    await fetch("/api/tasks", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: newStatus }),
+    })
+
+    mutate()
   }
 
-  const handleDelete = (id: string) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id))
+  const handleDelete = async (id: string) => {
+    if (!tasks) return
+
+    // Optimistic update
+    mutate(
+      tasks.filter((t) => t.id !== id),
+      false
+    )
+
+    await fetch(`/api/tasks?id=${id}`, { method: "DELETE" })
+    mutate()
   }
 
-  const handleAdd = (title: string) => {
-    const newTask: Task = {
-      id: Date.now().toString(),
+  const handleAdd = async (title: string) => {
+    const tempTask: Task = {
+      id: `temp-${Date.now()}`,
       title,
       status: "pending",
       category: "default",
     }
-    setTasks((prev) => [newTask, ...prev])
+
+    // Optimistic update
+    mutate(tasks ? [tempTask, ...tasks] : [tempTask], false)
+
+    await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    })
+
+    mutate()
   }
 
   return (
@@ -91,7 +115,19 @@ export function DashboardContent() {
 
       {/* Task list */}
       <div className="flex flex-col gap-2.5">
-        {tasks.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-28 text-center">
+            <Loader2 className="size-5 text-primary/50 animate-spin" />
+            <p className="text-[13px] text-muted-foreground/40 mt-4">Loading tasks...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-28 text-center">
+            <p className="text-[14px] text-destructive/70">Failed to load tasks</p>
+            <p className="text-[13px] text-muted-foreground/40 mt-2">
+              Check your Supabase connection and try again
+            </p>
+          </div>
+        ) : !tasks || tasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-28 text-center">
             <p className="text-[14px] text-muted-foreground/50">No tasks yet</p>
             <p className="text-[13px] text-muted-foreground/25 mt-2">
