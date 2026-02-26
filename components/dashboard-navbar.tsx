@@ -9,7 +9,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { supabase } from "@/lib/supabaseClient"
+import { useRouter } from "next/navigation"
+
 export function DashboardNavbar() {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push("/login")
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full bg-background/70 backdrop-blur-xl">
       <nav className="flex items-center justify-between h-16 px-6 lg:px-10 max-w-6xl mx-auto w-full">
@@ -40,8 +50,12 @@ export function DashboardNavbar() {
               </Avatar>
             </button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-44 bg-card border-border/40">
-            <DropdownMenuItem className="text-muted-foreground hover:text-foreground cursor-pointer text-[13px]">
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-muted-foreground hover:text-foreground cursor-pointer text-[13px]"
+            >
               <LogOut className="size-3.5 mr-2" />
               Sign out
             </DropdownMenuItem>
